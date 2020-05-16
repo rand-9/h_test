@@ -7,43 +7,41 @@ from time import sleep
 import serial
 
 
+#pump run time: 30 min
 runtime = 30 * 3600
+rest = 10 * 3600
 
-ser = serial.Serial(
-        port='/dev/serial0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
-        baudrate = 9600,
-        parity=serial.PARITY_NONE,
-        stopbits=serial.STOPBITS_ONE,
-        bytesize=serial.EIGHTBITS,
-        timeout=1
+#Serial communication init
+ser = serial.Serial(port='/dev/serial0', 
+baudrate = 9600,
+parity=serial.PARITY_NONE,
+stopbits=serial.STOPBITS_ONE,
+bytesize=serial.EIGHTBITS,
+timeout=1
 )
 
-def pump():
+
+def pump(switch):
     # serial to arduino
-    print("Guarda come pompo")
-    ser.write(str.encode('serialTest'))
+    if switch:
+        print("Pump start")
+        ser.write(str.encode('pon\n'))
+    else:
+        print("Pump stop")
+        ser.write(str.encode('poff\n'))
 
-# Returns current time in format yyyy-mm-dd HH:MM:SS
-now_time = datetime.datetime.now().strftime('%H:%M')
 
-# Main method
-#   3.  Runs sprinkler if rainfall falls below threshold
-def main(): 
+# Main loop
+def main():
 
-     while True:
+    while True:
+
         now_time = datetime.datetime.now().strftime('%H:%M')
-         
-        if (now_time == '19:21'):
-            print(now_time)
-            pump()
-            t = 0
-            while(t < 100):
-                print('while')
-                sleep(1)
-                t += 1
-        print("esc")
-        #pump()
-    
+        if (now_time == '08:00' | now_time == '13:00' | now_time == '18:00' ):
+            pump(True)
+            sleep(runtime)
+            pump(False)
+
 
 if __name__ == "__main__":
     main()
