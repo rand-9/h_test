@@ -7,7 +7,7 @@ from time import sleep
 import serial
 
 ser = serial.Serial(
-        port='/dev/serial0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
+        port='/dev/ttyACM0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
         baudrate = 9600,
         parity=serial.PARITY_NONE,
         stopbits=serial.STOPBITS_ONE,
@@ -18,7 +18,7 @@ ser = serial.Serial(
 
 def main(): 
     while True:
-        ser.write(str.encode('serialTest \n'))
+        #ser.write(str.encode('serialTest \n'))
         sleep(1)
         x = ser.readline()
         print(x)
