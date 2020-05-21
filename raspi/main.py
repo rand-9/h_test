@@ -5,7 +5,14 @@ import sys
 import datetime
 from time import sleep
 import serial
+import RPi.GPIO as GPIO
 
+
+#GPIO SET UP
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17,out)
+
+GPIO.output(17,GPIO.HIGH)
 
 #pump run time: 30 min
 runtime = 30 * 3600
@@ -26,9 +33,11 @@ def pump(switch):
     if switch:
         print("Pump start")
         ser.write(str.encode('pon\n'))
+		GPIO.output(17,GPIO.LOW)
     else:
         print("Pump stop")
         ser.write(str.encode('poff\n'))
+		GPIO.output(17,GPIO.HIGH)
 
 
 # Main loop
