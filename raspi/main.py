@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-g
 
 import os
 import sys
