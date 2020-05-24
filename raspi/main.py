@@ -28,6 +28,14 @@ timeout=1
 )
 
 
+def getTemp():
+    ser.write(str.encode('tmp'))
+
+
+def getHum():
+    ser.write(str.encode('hum'))
+
+
 def pump(switch):
     # serial to arduino
     if switch:
@@ -40,17 +48,29 @@ def pump(switch):
         #GPIO.output(17,GPIO.LOW)
 
 
+def checkSensors():
+    now_time = datetime.datetime.now().strftime('%H:%M')
+    if now_time == '08.00' or now_time == '13.00' or now_time == '18.00':
+        getTemp()
+
+
+def checkPump():
+    now_time = datetime.datetime.now().strftime('%H:%M')
+    if now_time == '08.00' or now_time == '13.00' or now_time == '18.00':
+        pump(True)
+        sleep(runtime)
+        pump(False)
+
+
 # Main loop
 def main():
 
     while True:
 
-        now_time = datetime.datetime.now().strftime('%H:%M')
-        if (now_time == '08.00' or now_time == '13.00' or now_time == '18.00'):
-            pump(True)
-            sleep(runtime)
-            pump(False)
-            sleep(runtime)
+        checkPump()
+        checkSensors()
+
+        sleep(20)
 
 
 if __name__ == "__main__":
