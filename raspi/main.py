@@ -17,6 +17,9 @@ GPIO.output(17,GPIO.LOW)
 # pump run time: 30 min
 runtime = 30 * 3600
 rest = 10 * 3600
+morning = "08:00"
+lunch = "13:00"
+dinner = "16:30"
 
 # Serial communication init
 ser = serial.Serial(port='/dev/ttyACM0', 
@@ -50,13 +53,15 @@ def pump(switch):
 
 def checkSensors():
     now_time = datetime.datetime.now().strftime('%H:%M')
-    if now_time == '08.00' or now_time == '13.00' or now_time == '18.00':
+    if now_time == morning  or now_time == lunch  or now_time == dinner:
         getTemp()
-
+	sleesp(3)
+	getHum()
+	sleep(3)
 
 def checkPump():
     now_time = datetime.datetime.now().strftime('%H:%M')
-    if now_time == '08.00' or now_time == '13.00' or now_time == '18.00':
+    if now_time == morning or now_time == lunch or now_time == dinner:
         pump(True)
         sleep(runtime)
         pump(False)
@@ -67,8 +72,10 @@ def main():
 
     while True:
 
-        checkPump()
         checkSensors()
+	sleep(5)
+	checkPump()
+	sleep(5)
 
         sleep(20)
 
