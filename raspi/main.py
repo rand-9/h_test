@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+g
 
 import os
 import sys
@@ -6,6 +7,7 @@ import datetime
 from time import sleep
 import serial
 import RPi.GPIO as GPIO
+from Logger import log
 
 
 # GPIO SET UP
@@ -22,6 +24,7 @@ lunch = "13:00"
 dinner = "20:20"
 
 # Serial communication init
+log("Setinng up serial comm")
 ser = serial.Serial(port='/dev/ttyACM0', 
 baudrate = 9600,
 parity=serial.PARITY_NONE,
@@ -32,26 +35,31 @@ timeout=1
 
 
 def getTemp():
+    log("send get temp command to serial")
     ser.write(str.encode('tmp'))
 
 
 def getHum():
+    log("send get humidity command to serial")
     ser.write(str.encode('hum'))
 
 
 def pump(switch):
     # serial to arduino
     if switch:
+        log("Sending pump start to serial")
         print("Pump start")
         ser.write(str.encode('pon'))
         #GPIO.output(17,GPIO.HIGH)
     else:
+        log("Sending pump stop to serial")
         print("Pump stop")
         ser.write(str.encode('pof'))
         #GPIO.output(17,GPIO.LOW)
 
 
 def checkSensors():
+    log("Checking for sensor data")
     now_time = datetime.datetime.now().strftime('%H:%M')
     if now_time == morning  or now_time == lunch  or now_time == dinner:
         getTemp()
@@ -60,6 +68,7 @@ def checkSensors():
 	sleep(3)
 
 def checkPump():
+    log("Checking if it is time to pump")
     now_time = datetime.datetime.now().strftime('%H:%M')
     if now_time == morning or now_time == lunch or now_time == dinner:
         pump(True)
@@ -69,10 +78,10 @@ def checkPump():
 
 # Main loop
 def main():
+    log("Hydroponic START")
 
     while True:
-
-        checkSensors()
+    checkSensors()
 	sleep(5)
 	checkPump()
 	sleep(5)
