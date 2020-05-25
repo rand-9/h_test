@@ -31,23 +31,28 @@ timeout=1
 )
 
 
+def write(msg):
+    ser.write(bytearray(msg + '\n', encoding='utf-8'))
+
+
+
 def getTemp():
-    ser.write(str.encode('tmp'))
+    write('tmp')
 
 
 def getHum():
-    ser.write(str.encode('hum'))
+    ser.write('hum')
 
 
 def pump(switch):
     # serial to arduino
     if switch:
         print("Pump start")
-        ser.write(str.encode('pon'))
+        write('pon')
         #GPIO.output(17,GPIO.HIGH)
     else:
         print("Pump stop")
-        ser.write(str.encode('pof'))
+        write('pof')
         #GPIO.output(17,GPIO.LOW)
 
 
@@ -75,9 +80,9 @@ def main():
         checkSensors()
 	sleep(5)
 	checkPump()
+
 	sleep(5)
 
-        sleep(20)
 
 
 if __name__ == "__main__":
