@@ -1,7 +1,7 @@
 import logging
 import time
 
-log_file_name = '{}.log'.format(time.strftime("%Y-%m-%d-%H:%M:%S").replace(':','-'))
+log_file_name = '{}.log'.format(time.strftime("%m-%d-%H:%M:%S").replace(':','-'))
 
 with open(log_file_name, 'w'):
     pass
