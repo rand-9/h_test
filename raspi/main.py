@@ -75,7 +75,7 @@ def checkPump():
     now_time = datetime.datetime.now().strftime('%H:%M')
     if now_time == morning or now_time == lunch or now_time == dinner:
 	pump(True)
-        sleep(testtime)
+        sleep(runtime)
         pump(False)
 
 
