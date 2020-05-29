@@ -7,6 +7,7 @@ from time import sleep
 import serial
 import RPi.GPIO as GPIO
 from Logger import log
+import DataLogger
 
 
 # GPIO SET UP
@@ -34,41 +35,55 @@ timeout=1
 )
 
 
-def write(msg):
+def writeToSerial(msg):
     #ser.write(bytearray(msg + '\n', encoding='utf-8'))
     ser.write(str.encode(msg))
 
 
 def getTemp():
     log("send get temp command to serial")
-    write('tmp')
-
+    writeToSerial('tmp')
+    sleep(1)
+    x = ser.readline()
+    return x
 
 def getHum():
     log("send get humidity command to serial")
-    write('hum')
-
+    writeToSerial('hum')
+    sleep(1)
+    x = ser.readline()
+    return x
 
 def pump(switch):
     # serial to arduino
     if switch:
         log("Sending pump START to serial")
-        write('pon')
+        writeToSerial('pon')
         #GPIO.output(17,GPIO.HIGH)
     else:
         log("Sending pump STOP to serial")
-        write('pof')
+        writeToSerial('pof')
         #GPIO.output(17,GPIO.LOW)
 
 
 def checkSensors():
     #log("Checking for sensor data")
     now_time = datetime.datetime.now().strftime('%H:%M')
-    if now_time == morning  or now_time == lunch  or now_time == dinner:
-        getTemp()
-	sleep(3)
-	getHum()
-	sleep(3)
+    if now_time == morning or now_time == lunch or now_time == dinner:
+        log("Checking sensors...")
+        t = getTemp()
+        sleep(3)
+        h = getHum()
+        sleep(3)
+
+        ts = datetime.datetime.now().strftime('%H:%M:%S')
+
+        d = {
+            "timestamp": ts,
+            "temperature": t,
+            "humidity": h
+        }
+        DataLogger.writeData(d)
 
 def checkPump():
     #log("Checking if it is time to pump")
