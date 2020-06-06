@@ -41,13 +41,13 @@ def writeToSerial(msg):
 
 
 def addA():
-    log("adding nutrient A")
+    log("send add nutrient A")
     writeToSerial("a")
     sleep(1)
 
 
 def addB():
-    log("adding nutrient B")
+    log("send add nutrient B")
     writeToSerial("b")
     sleep(1)
 
@@ -66,6 +66,8 @@ def getTemp():
     writeToSerial('tmp')
     sleep(1)
     x = ser.readline()
+    log("return temperature value:")
+    log(x)
     return x
 
 
@@ -74,14 +76,18 @@ def getHum():
     writeToSerial('hum')
     sleep(1)
     x = ser.readline()
+    log("return humidity value:")
+    log(x)
     return x
 
 
 def getEC():
-    log("send get humidity command to serial")
+    log("send get ec command to serial")
     writeToSerial('ec')
     sleep(1)
     x = ser.readline()
+    log("return ec value:")
+    log(x)
     return x
 
 
