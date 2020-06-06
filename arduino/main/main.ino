@@ -24,6 +24,7 @@ void setup() {
   pinMode(4, OUTPUT);  // pin water add pump
   dht.begin();// Setup sensor:
   ec.begin();
+  Serial.println("Starting Arduino Uno...");
 }
 
 void loop() {
