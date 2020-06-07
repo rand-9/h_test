@@ -22,6 +22,8 @@ void setup() {
   Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
   pinMode(3, OUTPUT);  // pin pump
   pinMode(4, OUTPUT);  // pin water add pump
+  pinMode(5, OUTPUT);  // pin water add A
+  pinMode(6, OUTPUT);  // pin water add B
   dht.begin();// Setup sensor:
   ec.begin();
   Serial.println("Starting Arduino Uno...");
@@ -58,6 +60,21 @@ if (Serial.available() > 0) {
       delay(500);
   }
 
+
+  else if(incomingByte == "b") {
+      digitalWrite(5, LOW);
+      delay(1000);//Wait for a second
+      digitalWrite(4, HIGH);
+      delay(500);
+  }
+
+
+  else if(incomingByte == "a") {
+      digitalWrite(6, LOW);
+      delay(1000);//Wait for a second
+      digitalWrite(4, HIGH);
+      delay(500);
+  }
 
   else if(incomingByte == "tmp") {
       delay(250);
