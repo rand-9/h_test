@@ -88,7 +88,7 @@ def getEC():
     x = ser.readline()
     log("return ec value:")
     log(x)
-    return x
+    return float(x)
 
 
 def pump(switch):
