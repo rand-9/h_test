@@ -24,9 +24,9 @@ def writeDict(dict):
 
 
 if os.path.isfile(fileloc):
-    print ("csv data file exist")
+    print("csv data file exist")
 else:
-    print ("csv data file not exist, create...")
+    print("csv data file not exist, create new one...")
     with open(fileloc, mode='w') as data_csv:
         fieldnames = ['timestamp', 'temperature', 'humidity', "conductivity"]
         writer = csv.DictWriter(data_csv, fieldnames=fieldnames)
