@@ -16,9 +16,10 @@ DFRobot_EC ec;
 String incomingByte = "";
 DHT dht = DHT(DHTPIN, DHTTYPE);
 
+int pump_time = 10000
+
 
 void setup() {
-
   Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
   pinMode(3, OUTPUT);  // pin pump
   pinMode(4, OUTPUT);  // pin water add pump
@@ -51,19 +52,27 @@ if (Serial.available() > 0) {
   }
 
 
-  else if(incomingByte == "wat") {
+  else if(incomingByte == "won") {
+
+  //Set the LED pin to LOW. This turns it off
+      digitalWrite(4, HIGH);
+      //delay(pump_time);//Wait for a second
+      //digitalWrite(4, LOW);
+      delay(500);
+  }
+
+
+    else if(incomingByte == "wof") {
 
   //Set the LED pin to LOW. This turns it off
       digitalWrite(4, LOW);
-      delay(1000);//Wait for a second
-      digitalWrite(4, HIGH);
       delay(500);
   }
 
 
   else if(incomingByte == "b") {
       digitalWrite(5, LOW);
-      delay(1000);//Wait for a second
+      delay(pump_time);//Wait for a second
       digitalWrite(4, HIGH);
       delay(500);
   }
@@ -71,7 +80,7 @@ if (Serial.available() > 0) {
 
   else if(incomingByte == "a") {
       digitalWrite(6, LOW);
-      delay(1000);//Wait for a second
+      delay(pump_time);//Wait for a second
       digitalWrite(4, HIGH);
       delay(500);
   }

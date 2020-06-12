@@ -55,7 +55,7 @@ def addB():
 def addWater(switch):
     if switch:
         log("Sending pump START to serial")
-        writeToSerial('w0')
+        writeToSerial('won')
     else:
         log("Sending pump STOP to serial")
         writeToSerial('wof')
