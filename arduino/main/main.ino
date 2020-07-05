@@ -16,7 +16,7 @@ DFRobot_EC ec;
 String incomingByte = "";
 DHT dht = DHT(DHTPIN, DHTTYPE);
 
-int pump_time = 10000
+int pump_time = 10000;
 
 
 void setup() {
