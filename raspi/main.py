@@ -143,8 +143,9 @@ def checkWaterQuality():
             sleep(30)
         elif ec > EC_MAX:
             log("EC value is above range")
-            addWater()
+            addWater(True)
             sleep(30)
+            addWater(False)
 
     sleep(90)
 
