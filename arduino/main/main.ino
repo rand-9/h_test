@@ -16,7 +16,7 @@ DFRobot_EC ec;
 String incomingByte = "";
 DHT dht = DHT(DHTPIN, DHTTYPE);
 
-int pump_time = 10000;
+int pump_time = 2000;
 
 
 void setup() {
@@ -27,7 +27,7 @@ void setup() {
   pinMode(6, OUTPUT);  // pin water add B
   dht.begin();// Setup sensor:
   ec.begin();
-  Serial.println("Starting Arduino Uno...");
+  //Serial.println("Starting Arduino Uno...");
 }
 
 void loop() {
@@ -40,14 +40,14 @@ if (Serial.available() > 0) {
   if (incomingByte == "pon") {
     
   //Set the LED pin to HIGH. This gives power to the LED and turns it on
-      digitalWrite(12, HIGH);           
+      digitalWrite(3, HIGH);           
       delay(500);//Wait for a second
   }
 
   else if(incomingByte == "pof") {
 
   //Set the LED pin to LOW. This turns it off
-      digitalWrite(12, LOW);
+      digitalWrite(3, LOW);
       delay(500);//Wait for a second
   }
 
@@ -71,17 +71,17 @@ if (Serial.available() > 0) {
 
 
   else if(incomingByte == "b") {
-      digitalWrite(5, LOW);
+      digitalWrite(5, HIGH);
       delay(pump_time);//Wait for a second
-      digitalWrite(4, HIGH);
+      digitalWrite(5, LOW);
       delay(500);
   }
 
 
   else if(incomingByte == "a") {
-      digitalWrite(6, LOW);
+      digitalWrite(6, HIGH);
       delay(pump_time);//Wait for a second
-      digitalWrite(4, HIGH);
+      digitalWrite(6, LOW);
       delay(500);
   }
 
@@ -89,7 +89,7 @@ if (Serial.available() > 0) {
       delay(250);
       float t = dht.readTemperature(); // Read the temperature as Celsius:
       delay(500);
-      Serial.print("Temperature: ");
+      //Serial.print("Temperature: ");
       Serial.print(t);
       delay(250);
   }
@@ -99,7 +99,7 @@ if (Serial.available() > 0) {
       delay(250);
       float h = dht.readHumidity();// Read the humidity in %:
       delay(500);
-      Serial.print("Humidity: ");
+      //Serial.print("Humidity: ");
       Serial.print(h);
       delay(250);
   }
@@ -109,7 +109,7 @@ if (Serial.available() > 0) {
       voltage = analogRead(EC_PIN)/1024.0*5000;  // read the voltage
       ecValue =  ec.readEC(voltage,temperature);
       delay(500);
-      Serial.print("Conductivity: ");
+      //Serial.print("Conductivity: ");
       Serial.print(ecValue,2);
       delay(250);
   }
