@@ -17,13 +17,11 @@ import DataLogger
 
 # pump run time: 30 min
 runtime = 30 * 60
-testtime = 2 * 60
-rest = 10 * 3600
-morning = "06:00"
-lunch = "10:00"
-afternoon = "15:00"
-dinner = "20:00"
-night = "23:00"
+morning = "07:00"
+lunch = "11:00"
+afternoon = "16:00"
+dinner = "21:00"
+night = "03:00"
 EC_MIN = 1.40
 EC_MAX = 1.60
 correction = False
