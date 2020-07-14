@@ -10,12 +10,7 @@ from Logger import log
 import DataLogger
 
 
-# GPIO SET UP
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(17,GPIO.OUT)
-# GPIO.output(17,GPIO.LOW)
-
-# pump run time: 30 min
+# constant values
 runtime = 30 * 60
 morning = "07:00"
 lunch = "11:00"
@@ -27,7 +22,7 @@ EC_MAX = 1.60
 correction = False
 
 # Serial communication init
-log("Setting up serial comm")
+log("Setting up serial communication")
 ser = serial.Serial(port='/dev/ttyACM0',
                     baudrate=9600,
                     parity=serial.PARITY_NONE,
@@ -42,23 +37,23 @@ def writeToSerial(msg):
 
 
 def addA():
-    log("send add nutrient A")
+    log("send command - add nutrient A")
     writeToSerial("a")
     sleep(1)
 
 
 def addB():
-    log("send add nutrient B")
+    log("send command - add nutrient B")
     writeToSerial("b")
     sleep(1)
 
 
 def addWater(switch):
     if switch:
-        log("Sending pump START to serial")
+        log("send add water START to serial")
         writeToSerial('won')
     else:
-        log("Sending pump STOP to serial")
+        log("send add water STOP to serial")
         writeToSerial('wof')
 
 
@@ -95,18 +90,15 @@ def getEC():
 def pump(switch):
     # serial to arduino
     if switch:
-        log("Sending pump START to serial")
+        log("send recycle pump START to serial")
         writeToSerial('pon')
     else:
-        log("Sending pump STOP to serial")
+        log("send recycle pump STOP to serial")
         writeToSerial('pof')
 
 
 def checkSensors():
-    log("Checking for sensor data")
-    #now_time = datetime.datetime.now().strftime('%H:%M')
-    #if now_time == morning or now_time == lunch or now_time == dinner:
-    log("Checking sensors...")
+    log("get all sensors values")
     t = getTemp()
     sleep(3)
     h = getHum()
@@ -126,42 +118,41 @@ def checkSensors():
 def checkWaterQuality():
     ser.flushInput()
     ser.flushOutput()
-    log("checking water quality1")
+    log("check water quality time")
     now_time = datetime.datetime.now().strftime('%H:%M')
-    log(now_time)
+    log(now_time, "debug")
     time_list = now_time.split(':')
     time_list = [int(i) for i in time_list]
-    log(time_list[0])
     result = False
 
     if time_list[0] == int(morning.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2:
-         log("Checking water quality2")
+         log("adjust water quality", "debug")
          checkSensors()
          sleep(5)
          ec = getEC()
          sleep(5)
          if EC_MIN < ec < EC_MAX:
-             log("EC value is in range")
+             log("ec value is in range")
              result = True
          elif ec < EC_MIN:
-             log("EC value is below range")
+             log("ec value is below range")
              addA()
              sleep(30)
              addB()
              sleep(30)
          elif ec > EC_MAX:
-             log("EC value is above range")
+             log("ec value is above range")
              addWater(True)
              sleep(30)
              addWater(False)
 
-    sleep(120)
+    sleep(30)
     return result
 
 
 
 def checkPump():
-    log("Checking if it is time to pump")
+    log("checking if time to recycle pump")
     now_time = datetime.datetime.now().strftime('%H:%M')
     if now_time==morning or now_time==lunch or now_time==afternoon or now_time==dinner or now_time==night :
         pump(True)
@@ -171,7 +162,7 @@ def checkPump():
 
 # Main loop
 def main():
-    log("Hydroponic main Starting")
+    log("Hydroponic main script start")
     while True:
         checkWaterQuality()
         sleep(5)
