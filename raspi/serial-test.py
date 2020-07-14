@@ -5,6 +5,20 @@ import sys
 import datetime
 from time import sleep
 import serial
+import argparse
+
+
+
+def get_arguments():
+    parser = argparse.ArgumentParser(description='Send a single command to the serial port.')
+    parser.add_argument('--command',
+                        type=str,
+                        default='tmp',
+                        help='the command to send to serial')
+    return parser.parse_args()
+
+
+args = get_arguments()
 
 ser = serial.Serial(
         port='/dev/ttyACM0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
@@ -17,8 +31,7 @@ ser = serial.Serial(
 
 
 def main(): 
-    while True:
-        #ser.write(str.encode('serialTest \n'))
+        ser.write(str.encode(args.command))
         sleep(1)
         x = ser.readline()
         print(x)
