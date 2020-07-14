@@ -17,7 +17,7 @@ def writeDataSamples():
 
 def writeDict(dict):
     log("Writing values to csv...")
-    with open('document.csv', 'a') as data_csv:
+    with open('data.csv', 'a') as data_csv:
         fieldnames = ['timestamp', 'temperature', 'humidity', "conductivity"]
         writer = csv.DictWriter(data_csv, fieldnames=fieldnames)
         writer.writerow(dict)
