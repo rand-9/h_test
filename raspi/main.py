@@ -120,7 +120,6 @@ def checkWaterQuality():
     ser.flushOutput()
     log("check water quality time")
     now_time = datetime.datetime.now().strftime('%H:%M')
-    log(now_time, "debug")
     time_list = now_time.split(':')
     time_list = [int(i) for i in time_list]
     result = False
@@ -146,7 +145,7 @@ def checkWaterQuality():
              sleep(30)
              addWater(False)
 
-    sleep(30)
+    sleep(120)
     return result
 
 
