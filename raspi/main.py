@@ -114,7 +114,7 @@ def checkSensors():
     h = getHum()
     sleep(3)
     ec = getEC()
-    ts = datetime.datetime.now().strftime('%H:%M:%S')
+    ts = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
     d = {
             "timestamp": ts,
             "temperature": t,
