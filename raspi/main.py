@@ -136,7 +136,7 @@ def checkWaterQuality():
     log(time_list[0])
     result = False
 
-    if time_list[0] == int(morning.split(':')[0])-1 or time_list[0] == int(lunch.split(':')[0])-1 or time_list[0] == int(afternoon.split(':')[0])-1 or time_list[0] == int(dinner.split(':')[0])-1 or time_list[0] == int(night.split(':')[0])-1:
+    if time_list[0] == int(morning.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2:
          log("Checking water quality2")
          checkSensors()
          sleep(5)
@@ -157,7 +157,7 @@ def checkWaterQuality():
              sleep(30)
              addWater(False)
 
-    sleep(30)
+    sleep(120)
     return result
 
 
