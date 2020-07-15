@@ -17,8 +17,8 @@ lunch = "11:00"
 afternoon = "16:00"
 dinner = "21:00"
 night = "03:00"
-EC_MIN = 1.40
-EC_MAX = 1.60
+EC_MIN = 1.90
+EC_MAX = 2.10
 correction = False
 
 # Serial communication init
@@ -122,9 +122,8 @@ def checkWaterQuality():
     now_time = datetime.datetime.now().strftime('%H:%M')
     time_list = now_time.split(':')
     time_list = [int(i) for i in time_list]
-    result = False
 
-    if time_list[0] == int(morning.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2:
+    if time_list[0] == int(morning.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2 or int("23"):
          log("adjust water quality", "debug")
          checkSensors()
          sleep(5)
@@ -145,8 +144,8 @@ def checkWaterQuality():
              sleep(30)
              addWater(False)
 
-    sleep(120)
-    return result
+         sleep(120)
+
 
 
 
