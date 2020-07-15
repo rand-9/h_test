@@ -19,6 +19,8 @@ dinner = "21:00"
 night = "03:00"
 EC_MIN = 1.40
 EC_MAX = 1.60
+PH_MIN = 4.50
+PH_MAX = 5.00
 correction = False
 
 # Serial communication init
@@ -57,6 +59,21 @@ def addWater(switch):
         writeToSerial('wof')
 
 
+def addPhDown():
+    log("send command - add ph down")
+    writeToSerial("phd")
+    sleep(1)
+
+
+def air(switch):
+    if switch:
+        log("send air pump START to serial")
+        writeToSerial('aon')
+    else:
+        log("send air pump STOP to serial")
+        writeToSerial('aon')
+
+
 def getTemp():
     log("send get temp command to serial")
     writeToSerial('tmp')
@@ -83,6 +100,16 @@ def getEC():
     sleep(3)
     x = ser.readline()
     log("return ec value:")
+    log(x)
+    return float(x)
+
+
+def getPH():
+    log("send get ph command to serial")
+    writeToSerial('ph')
+    sleep(3)
+    x = ser.readline()
+    log("return ph value:")
     log(x)
     return float(x)
 
@@ -124,17 +151,17 @@ def checkWaterQuality():
     time_list = [int(i) for i in time_list]
     result = False
 
-    if time_list[0] == int(morning.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2:
-         log("adjust water quality", "debug")
+    if time_list[0] == int(lunch.split(':')[0])-3 or time_list[0] == int(dinner.split(':')[0])-3:
+         log("adjust ec", "debug")
          checkSensors()
          sleep(5)
          ec = getEC()
          sleep(5)
          if EC_MIN < ec < EC_MAX:
              log("ec value is in range")
-             result = True
          elif ec < EC_MIN:
              log("ec value is below range")
+             air(True)
              addA()
              sleep(30)
              addB()
@@ -144,9 +171,27 @@ def checkWaterQuality():
              addWater(True)
              sleep(30)
              addWater(False)
+         sleep(120)
+         air(False)
 
-    sleep(120)
-    return result
+    elif time_list[0] == int(lunch.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2:
+         log("adjust pH", "debug")
+         checkSensors()
+         sleep(5)
+         ph = getPH()
+         sleep(5)
+         if PH_MIN < ph < PH_MAX:
+             log("ph value is in range")
+         elif ph < PH_MIN:
+             log("ph value is below range")
+         elif ph > PH_MAX:
+             log("ph value is above range")
+             air(True)
+             addPhDown()
+             sleep(5)
+
+         sleep(120)
+         air(False)
 
 
 

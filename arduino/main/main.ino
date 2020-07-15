@@ -17,7 +17,7 @@ String incomingByte = "";
 DHT dht = DHT(DHTPIN, DHTTYPE);
 
 int pump_time = 2000;
-
+int ph_down_time = 1000;
 
 void setup() {
   Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
@@ -25,7 +25,8 @@ void setup() {
   pinMode(4, OUTPUT);  // pin water add pump
   pinMode(5, OUTPUT);  // pin water add A
   pinMode(6, OUTPUT);  // pin water add B
-  pinMode(7, OUTUT);   // pin air pump
+  pinMode(7, OUTPUT);  // pin air pump
+  pinMode(8, OUTPUT);  // pin ph down
   dht.begin();// Setup sensor:
   ec.begin();
   //Serial.println("Starting Arduino Uno...");
@@ -95,6 +96,14 @@ if (Serial.available() > 0) {
       delay(500);
   }
 
+
+  else if(incoming == "phd") {
+      digitalWrite(8, HIGH);
+      delay(ph_down_time);
+      digitalWrite(8, LOW);
+      delay(500);
+  }
+
   else if(incomingByte == "tmp") {
       delay(250);
       float t = dht.readTemperature(); // Read the temperature as Celsius:
@@ -124,7 +133,17 @@ if (Serial.available() > 0) {
       delay(250);
   }
 
-    
+
+  else if(incominByte == "ph") {
+      delay(250);
+      //voltage = analogRead(EC_PIN)/1024.0*5000;  // read the voltage
+      //ecValue =  ec.readEC(voltage,temperature);
+      //delay(500);
+      //Serial.print("Conductivity: ");
+      //Serial.print(ecValue,2);
+      delay(250);
+  }
+
 
 }
 }
