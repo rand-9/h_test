@@ -25,6 +25,7 @@ void setup() {
   pinMode(4, OUTPUT);  // pin water add pump
   pinMode(5, OUTPUT);  // pin water add A
   pinMode(6, OUTPUT);  // pin water add B
+  pinMode(7, OUTUT);   // pin air pump
   dht.begin();// Setup sensor:
   ec.begin();
   //Serial.println("Starting Arduino Uno...");
@@ -69,6 +70,15 @@ if (Serial.available() > 0) {
       delay(500);
   }
 
+  else if(incomingByte == "aon") {
+      digitalWrite(7, HIGH);
+      delay(500);
+  }
+
+  else if(incomingByte == "aof") {
+      digitalWrite(7, LOW);
+      delay(500);
+  }
 
   else if(incomingByte == "b") {
       digitalWrite(5, HIGH);
