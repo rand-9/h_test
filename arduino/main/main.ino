@@ -79,12 +79,12 @@ if (Serial.available() > 0) {
       delay(500);
   }
 
-  else if(incomingByte == "za") {
+  else if(incomingByte == "aon") {
       digitalWrite(9, HIGH);
       delay(500);
   }
 
-  else if(incomingByte == "zb") {
+  else if(incomingByte == "aof") {
       digitalWrite(9, LOW);
       delay(500);
   }
