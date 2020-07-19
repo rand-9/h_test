@@ -6,12 +6,20 @@
 #define DHTTYPE DHT22   // DHT 22  (AM2302) sensor temperature
 
 #include "DFRobot_EC.h"
+#include "DFRobot_PH.h"
 #include <EEPROM.h>
 
 #define EC_PIN A1
+#define PH_PIN A2
 
-float voltage,ecValue,temperature = 25;
+float voltage1 = 25;
+float ecValue = 25;
+float voltage2 = 25;
+float phValue = 25;
+float temperature = 25;
+
 DFRobot_EC ec;
+DFRobot_PH ph;
 
 String incomingByte = "";
 DHT dht = DHT(DHTPIN, DHTTYPE);
@@ -25,7 +33,7 @@ void setup() {
   pinMode(4, OUTPUT);  // pin water add pump
   pinMode(5, OUTPUT);  // pin water add A
   pinMode(6, OUTPUT);  // pin water add B
-  pinMode(7, OUTPUT);  // pin air pump
+  pinMode(9, OUTPUT);  // pin air pump
   pinMode(8, OUTPUT);  // pin ph down
   dht.begin();// Setup sensor:
   ec.begin();
@@ -71,13 +79,13 @@ if (Serial.available() > 0) {
       delay(500);
   }
 
-  else if(incomingByte == "aon") {
-      digitalWrite(7, HIGH);
+  else if(incomingByte == "za") {
+      digitalWrite(9, HIGH);
       delay(500);
   }
 
-  else if(incomingByte == "aof") {
-      digitalWrite(7, LOW);
+  else if(incomingByte == "zb") {
+      digitalWrite(9, LOW);
       delay(500);
   }
 
@@ -97,7 +105,7 @@ if (Serial.available() > 0) {
   }
 
 
-  else if(incoming == "phd") {
+  else if(incomingByte == "phd") {
       digitalWrite(8, HIGH);
       delay(ph_down_time);
       digitalWrite(8, LOW);
@@ -125,22 +133,20 @@ if (Serial.available() > 0) {
 
   else if(incomingByte == "ec") {
       delay(250);
-      voltage = analogRead(EC_PIN)/1024.0*5000;  // read the voltage
-      ecValue =  ec.readEC(voltage,temperature);
+      voltage1 = analogRead(EC_PIN)/1024.0*5000;  // read the voltage
+      ecValue =  ec.readEC(voltage1,temperature);
       delay(500);
-      //Serial.print("Conductivity: ");
       Serial.print(ecValue,2);
       delay(250);
   }
 
 
-  else if(incominByte == "ph") {
+  else if(incomingByte == "ph") {
       delay(250);
-      //voltage = analogRead(EC_PIN)/1024.0*5000;  // read the voltage
-      //ecValue =  ec.readEC(voltage,temperature);
-      //delay(500);
-      //Serial.print("Conductivity: ");
-      //Serial.print(ecValue,2);
+      voltage2 = analogRead(PH_PIN)/1024.0*5000;  // read the voltage
+      phValue =  ph.readPH(voltage2,temperature);
+      delay(500);
+      Serial.print(phValue,2);
       delay(250);
   }
 
