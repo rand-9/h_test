@@ -123,7 +123,7 @@ def checkWaterQuality():
     time_list = now_time.split(':')
     time_list = [int(i) for i in time_list]
 
-    if time_list[0] == int(morning.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2 or int("23"):
+    if time_list[0] == int(morning.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2:
          log("adjust water quality", "debug")
          checkSensors()
          sleep(5)
