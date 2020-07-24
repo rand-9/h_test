@@ -30,13 +30,18 @@ ser = serial.Serial(
 )
 
 
-def main(): 
+def main():
+        #ser.flushInput()
+        #ser.flushOutput()
         ser.write(str.encode(args.command))
         sleep(1)
         x = ser.readline()
+        sleep(1) 
         print(x)
         sleep(1)
-
+        ##ser.flushInput()
+        ##ser.flushOutput()
+        ##sleep(1)
 
 if __name__ == "__main__":
     main()
