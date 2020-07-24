@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+##!/usr/bin/python3
 
 import os
 import sys
@@ -17,10 +17,10 @@ lunch = "11:00"
 afternoon = "16:00"
 dinner = "21:00"
 night = "03:00"
-EC_MIN = 1.40
-EC_MAX = 1.60
+EC_MIN = 1.90
+EC_MAX = 2.20
 PH_MIN = 4.50
-PH_MAX = 5.00
+PH_MAX = 5.50
 correction = False
 
 # Serial communication init
@@ -68,10 +68,10 @@ def addPhDown():
 def air(switch):
     if switch:
         log("send air pump START to serial")
-        writeToSerial('aon')
+        writeToSerial('za')
     else:
         log("send air pump STOP to serial")
-        writeToSerial('aon')
+        writeToSerial('zb')
 
 
 def getTemp():
@@ -162,6 +162,7 @@ def checkWaterQuality():
          elif ec < EC_MIN:
              log("ec value is below range")
              air(True)
+             sleep(5)
              addA()
              sleep(30)
              addB()
@@ -174,7 +175,7 @@ def checkWaterQuality():
          sleep(120)
          air(False)
 
-    elif time_list[0] == int(lunch.split(':')[0])-2 or time_list[0] == int(dinner.split(':')[0])-2:
+    elif time_list[0] == int(morning.split(':')[0])+1 or time_list[0] == int(lunch.split(':')[0])+1 or time_list[0] == int(afternoon.split(':')[0])+1 or time_list[0] == int(dinner.split(':')[0])+1:
          log("adjust pH", "debug")
          checkSensors()
          sleep(5)
@@ -186,12 +187,11 @@ def checkWaterQuality():
              log("ph value is below range")
          elif ph > PH_MAX:
              log("ph value is above range")
-             air(True)
-             addPhDown()
              sleep(5)
 
-         sleep(120)
-         air(False)
+
+         sleep(600)
+
 
 
 
