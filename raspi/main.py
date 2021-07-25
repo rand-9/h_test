@@ -17,8 +17,8 @@ lunch = "11:00"
 afternoon = "16:00"
 dinner = "21:00"
 night = "03:00"
-EC_MIN = 1.90
-EC_MAX = 2.20
+EC_MIN = 2.20
+EC_MAX = 2.50
 PH_MIN = 4.50
 PH_MAX = 5.50
 correction = False
@@ -161,7 +161,7 @@ def checkWaterQuality():
              log("ec value is in range")
          elif ec < EC_MIN:
              log("ec value is below range")
-             air(True)
+             #air(True)
              sleep(5)
              addA()
              sleep(30)
@@ -169,13 +169,12 @@ def checkWaterQuality():
              sleep(30)
          elif ec > EC_MAX:
              log("ec value is above range")
-             addWater(True)
              sleep(30)
-             addWater(False)
-         sleep(120)
-         air(False)
 
-    elif time_list[0] == int(morning.split(':')[0])+1 or time_list[0] == int(lunch.split(':')[0])+1 or time_list[0] == int(afternoon.split(':')[0])+1 or time_list[0] == int(dinner.split(':')[0])+1:
+         sleep(180)
+         #air(False)
+
+    elif now_time=="08:00" or now_time=="17:00" or now_time=="22:00":
          log("adjust pH", "debug")
          checkSensors()
          sleep(5)
@@ -188,9 +187,9 @@ def checkWaterQuality():
          elif ph > PH_MAX:
              log("ph value is above range")
              sleep(5)
+             #addPhDown()
+             sleep(5)
 
-
-         sleep(600)
 
 
 
