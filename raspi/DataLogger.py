@@ -12,13 +12,14 @@ def writeDataSamples():
     writer.writerow({'timestamp': 0,
                      'temperature': 0,
                      'humidity': 0,
-                     "conductivity": 0.00})
+                     "conductivity": 0.00,
+                     "acidity": 0.00})
 
 
 def writeDict(dict):
     log("Writing values to csv...")
     with open('data.csv', 'a') as data_csv:
-        fieldnames = ['timestamp', 'temperature', 'humidity', "conductivity"]
+        fieldnames = ['timestamp', 'temperature', 'humidity', "conductivity", "acidity"]
         writer = csv.DictWriter(data_csv, fieldnames=fieldnames)
         writer.writerow(dict)
 
@@ -28,7 +29,7 @@ if os.path.isfile(fileloc):
 else:
     print("csv data file not exist, create new one...")
     with open(fileloc, mode='w') as data_csv:
-        fieldnames = ['timestamp', 'temperature', 'humidity', "conductivity"]
+        fieldnames = ['timestamp', 'temperature', 'humidity', "conductivity", "acidity"]
         writer = csv.DictWriter(data_csv, fieldnames=fieldnames)
         writeDataSamples()
 

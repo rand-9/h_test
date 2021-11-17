@@ -5,22 +5,21 @@ import sys
 import datetime
 from time import sleep
 import serial
-import RPi.GPIO as GPIO
 from Logger import log
 import DataLogger
 
 
 # constant values
-runtime = 30 * 60
+runtime = 20 * 60
 morning = "07:00"
 lunch = "11:00"
-afternoon = "16:00"
-dinner = "21:00"
-night = "03:00"
-EC_MIN = 2.20
-EC_MAX = 2.50
-PH_MIN = 4.50
-PH_MAX = 5.50
+afternoon = "07:00"
+dinner = "07:00"
+night = "19:00"
+EC_MIN = 1.20
+EC_MAX = 1.70
+PH_MIN = 4.00
+PH_MAX = 5.90
 correction = False
 
 # Serial communication init
@@ -77,7 +76,7 @@ def air(switch):
 def getTemp():
     log("send get temp command to serial")
     writeToSerial('tmp')
-    sleep(1)
+    sleep(5)
     x = ser.readline()
     log("return temperature value:")
     log(x)
@@ -87,7 +86,7 @@ def getTemp():
 def getHum():
     log("send get humidity command to serial")
     writeToSerial('hum')
-    sleep(1)
+    sleep(5)
     x = ser.readline()
     log("return humidity value:")
     log(x)
@@ -126,17 +125,24 @@ def pump(switch):
 
 def checkSensors():
     log("get all sensors values")
+    ser.flushInput()
+    ser.flushOutput()
+    sleep(5)
     t = getTemp()
-    sleep(3)
+    sleep(5)
     h = getHum()
-    sleep(3)
+    sleep(5)
     ec = getEC()
+    sleep(5)
+    ph = getPH()
+    sleep(5)
     ts = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
     d = {
             "timestamp": ts,
             "temperature": t,
             "humidity": h,
-            "conductivity": ec
+            "conductivity": ec,
+            "acidity": ph
     }
     log(d)
     DataLogger.writeDict(d)
@@ -161,7 +167,7 @@ def checkWaterQuality():
              log("ec value is in range")
          elif ec < EC_MIN:
              log("ec value is below range")
-             #air(True)
+             air(True)
              sleep(5)
              addA()
              sleep(30)
@@ -172,7 +178,7 @@ def checkWaterQuality():
              sleep(30)
 
          sleep(180)
-         #air(False)
+         air(False)
 
     elif now_time=="08:00" or now_time=="17:00" or now_time=="22:00":
          log("adjust pH", "debug")
@@ -187,7 +193,7 @@ def checkWaterQuality():
          elif ph > PH_MAX:
              log("ph value is above range")
              sleep(5)
-             #addPhDown()
+             addPhDown()
              sleep(5)
 
 
@@ -195,7 +201,7 @@ def checkWaterQuality():
 
 
 def checkPump():
-    log("checking if time to recycle pump")
+    #log("checking if time to recycle pump")
     now_time = datetime.datetime.now().strftime('%H:%M')
     if now_time==morning or now_time==lunch or now_time==afternoon or now_time==dinner or now_time==night :
         pump(True)
@@ -205,7 +211,7 @@ def checkPump():
 
 # Main loop
 def main():
-    log("Hydroponic main script start")
+    log("--- Hydroponic sysytme start up ---")
     while True:
         checkWaterQuality()
         sleep(5)
